@@ -21,28 +21,32 @@ var Articles []Article
 
 func HomePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to the HomePage!")
-	fmt.Println("Endpoint: HomePage")
+
+	fmt.Println("Endpoint: GET {/}")
 }
 
 func ReturnArticlePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint: ArticlePage")
+	fmt.Println("Endpoint: GET {Articles}")
+
 	json.NewEncoder(w).Encode(Articles)
 }
 
 func GetArticleIDPage(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Enpoint: ArrticleIDPage")
+	fmt.Println("Endpoint: GET {Articles/{id}}")
 
 	pathVar := mux.Vars(r)
-	key := pathVar["id"]
+	id := pathVar["id"]
 
 	for _, articleContent := range Articles {
-		if articleContent.Id == key {
+		if articleContent.Id == id {
 			json.NewEncoder(w).Encode(articleContent)
 		}
 	}
 }
 
 func CreateNewArticlePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint: POST {Articles}")
+
 	requestBody, err := ioutil.ReadAll(r.Body)
 
 	if err != nil {
@@ -54,6 +58,8 @@ func CreateNewArticlePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateArticlePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint: PUT {Articles}")
+
 	reqBody, err := ioutil.ReadAll(r.Body)
 
 	if err != nil {
@@ -70,6 +76,19 @@ func UpdateArticlePage(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Articles)
 }
 
+func DeleteArticlePage(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Endpoint: DELETE {Articles/{id}}")
+
+	pathVar := mux.Vars(r)
+	id := pathVar["id"]
+
+	for index, delContent := range Articles {
+		if delContent.Id == id {
+			Articles = append(Articles[:index], Articles[index+1:]...)
+		}
+	}
+}
+
 func RequestHandler() {
 	router := mux.NewRouter()
 
@@ -79,7 +98,8 @@ func RequestHandler() {
 	router.HandleFunc("/", HomePage).Methods("GET")
 	router.HandleFunc("/Articles", ReturnArticlePage).Methods("GET")
 	router.HandleFunc("/Articles", CreateNewArticlePage).Methods("POST")
-	router.HandleFunc("/Articles", UpdateArticlePage)
+	router.HandleFunc("/Articles", UpdateArticlePage).Methods("PUT")
+	router.HandleFunc("/Articles/{id}", DeleteArticlePage).Methods("DELETE")
 	router.HandleFunc("/Articles/{id}", GetArticleIDPage).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
