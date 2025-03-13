@@ -66,7 +66,7 @@ func handleRequests() {
 }
 
 func main() {
-	fmt.Println("Server starting...")
+	fmt.Println("Server starting..")
 
 	handleRequests()
 }
