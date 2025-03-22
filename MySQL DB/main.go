@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -54,4 +55,17 @@ func main() {
 		// Print out the tag's ID and Name attribute
 		fmt.Println(tag.ID, tag.Name)
 	}
+
+	// Query a single row
+	var tag Tag
+
+	// Execute the query
+	err = db.QueryRow("SELECT id, name FROM tags where id = ?", 2).Scan(&tag.ID, &tag.Name)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	log.Println(tag.ID)
+	log.Println(tag.Name)
 }
