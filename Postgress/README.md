@@ -23,7 +23,7 @@ Text and character types are either fixed or variable and determine space alloca
 Postgres provides several numeric data types, including integers, floating points, arbitrary precision, and a special integer type called serial. Integers store numbers without fractions or decimals. Basic integers include integer, smallint, and bigint. Floating points describe numbers with decimals but without exact precision. Data with arbitrary precision are defined using numeric types. Serial types create unique ids or primary keys. Binary strings are stored using the bytea data type.
 
 ## Boolean Data Types
-True and false statements are boolean types and are standard types featured in most SQL databases. These statements are stored as true, false, or null.
+*True* and *false* statements are boolean types and are standard types featured in most SQL databases. These statements are stored as true, false, or null.
 
 ## Geometric Data Types
 Website design often depends on shapes to contain information within the website page. Postgres geometric data types store two-dimensional spatial objects. Types include points, lines, lsig, box, path, polygon, and circle.
